@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "m9vKCvLRhkKFfG7Iox/g3+5vV8N1+QTAtKqp6TH5iyeN5UEy2tGdWNxWOEdyLSf8RunDmYnpEuxRt0pzsbenxQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\test\\Documents\\Jacob Comp Sci Proj\\Final Computer Science Project\\Final Computer Science Project\\Final Computer Science Project.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\test\\.nuget\\packages\\embedio\\3.5.0\\embedio.3.5.0.nupkg.sha512",
+    "C:\\Users\\test\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\test\\.nuget\\packages\\system.valuetuple\\4.5.0\\system.valuetuple.4.5.0.nupkg.sha512",
+    "C:\\Users\\test\\.nuget\\packages\\unosquare.swan.lite\\3.1.0\\unosquare.swan.lite.3.1.0.nupkg.sha512"
+  ],
+  "logs": []
+}
