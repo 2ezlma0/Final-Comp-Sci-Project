@@ -224,9 +224,9 @@ namespace Final_Computer_Science_Project
             {
                 MessageBox.Show("Please login with the login button below");
             }
-            else if (audioNameCheckList.Items.Count == 0)
+            else if (audioNameCheckList.CheckedItems.Count == 0)
             {
-                MessageBox.Show("Checklist empty, please search and find an audio file before you use this button");
+                MessageBox.Show("Checklist empty or no items checked, please search and check at least one audio file before you use this button");
             }
             else
             {
@@ -411,6 +411,16 @@ namespace Final_Computer_Science_Project
         private void clearButton_Click(object sender, EventArgs e)
         {
             audioNameCheckList.Items.Clear();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void searchProgressBar_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
