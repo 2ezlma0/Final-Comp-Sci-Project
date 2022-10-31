@@ -11,6 +11,7 @@ namespace Final_Computer_Science_Project
     public partial class Form1 : Form
     {
         public List<string> audioFilesNames = new List<string>();
+        public List<string> searchedPaths = new List<string>();
         public bool loggedIn = false; //assume not logged in
         public static EmbedIOAuthServer _server;
         public static string authToken;
@@ -36,48 +37,58 @@ namespace Final_Computer_Science_Project
                 path = drives[0].Name;
             }
 
-            List<string> accessableDirectories = CheckAccessableDirectories(Directory.GetDirectories(path)); //first layer of subdirectories that are accessable
-            List<string> audioFiles = new List<string>();
-            List<string> directoriesToCheck = accessableDirectories; //sets first list to check the accessable directories already found on the first layer
-            List<string> checkedDirectories = new List<string>(); //list to store the directories that have been checked and are accessable
-            List<string> tempDirectories = new List<string>(); // list to store temporary directories to add to checked directories
-            bool finished = false; //assume unfinished
-            while (!finished)
+            if (searchedPaths.Contains(path))
             {
-                for (int i = 0; i < directoriesToCheck.Count; i++)
+                MessageBox.Show("Path has already been searched for");
+            }
+            else
+            {
+                searchedPaths.Add(path); //adds the path to a list of searched paths to not duplicate results in the checkedlist
+                List<string> accessableDirectories = CheckAccessableDirectories(Directory.GetDirectories(path)); //first layer of subdirectories that are accessable
+                List<string> audioFiles = new List<string>();
+                List<string> directoriesToCheck = accessableDirectories; //sets first list to check the accessable directories already found on the first layer
+                List<string> checkedDirectories = new List<string>(); //list to store the directories that have been checked and are accessable
+                List<string> tempDirectories = new List<string>(); // list to store temporary directories to add to checked directories
+                bool finished = false; //assume unfinished
+                while (!finished)
                 {
-                    tempDirectories = CheckAccessableDirectories(Directory.GetDirectories(directoriesToCheck[i]));
-                    if (tempDirectories.Count > 0)
+                    for (int i = 0; i < directoriesToCheck.Count; i++)
                     {
-                        for (int j = 0; j < tempDirectories.Count; j++)
+                        tempDirectories = CheckAccessableDirectories(Directory.GetDirectories(directoriesToCheck[i]));
+                        if (tempDirectories.Count > 0)
                         {
-                            checkedDirectories.Add(tempDirectories[j]);
+                            for (int j = 0; j < tempDirectories.Count; j++)
+                            {
+                                checkedDirectories.Add(tempDirectories[j]);
+                            }
                         }
                     }
-                }
 
-                if (checkedDirectories.Count == 0)
-                {
-                    finished = true;
-                }
-                else
-                {
-                    for (int j = 0; j < checkedDirectories.Count; j++)
+                    if (checkedDirectories.Count == 0)
                     {
-                        accessableDirectories.Add(checkedDirectories[j]); //adds checked directories of the next layer in the accessible directories list to check for audio files
+                        finished = true;
                     }
-                    directoriesToCheck = checkedDirectories; //sets the directories to check the next layer in                    
+                    else
+                    {
+                        for (int j = 0; j < checkedDirectories.Count; j++)
+                        {
+                            accessableDirectories.Add(checkedDirectories[j]); //adds checked directories of the next layer in the accessible directories list to check for audio files
+                        }
+                        directoriesToCheck = checkedDirectories; //sets the directories to check the next layer in                    
+                    }
+                    checkedDirectories = new List<string>(); //clears checked directories for the next loop (.Clear doesnt work for some reason because uhhh c#)
                 }
-                checkedDirectories = new List<string>(); //clears checked directories for the next loop (.Clear doesnt work for some reason because uhhh c#)
-            }
 
-            audioFiles = AudioFileSearch(path, accessableDirectories);
-            audioFilesNames = ExcessPathRemover(audioFiles);
-            for(int i = 0; i < audioFilesNames.Count; i++)
-            {
-                audioNameCheckList.Items.Add(audioFilesNames[i]);
+                for (int i = 0; i < accessableDirectories.Count; i++)
+                    searchedPaths.Add(accessableDirectories[i]); //adds all the accessable directories to the list of searched paths as well to not duplicate results in the checkedlist
+
+                audioFiles = AudioFileSearch(path, accessableDirectories);
+                audioFilesNames = ExcessPathRemover(audioFiles);
+                for (int i = 0; i < audioFilesNames.Count; i++)
+                {
+                    audioNameCheckList.Items.Add(audioFilesNames[i]);
+                }
             }
-            ;
         }
 
         private List<string> CheckAccessableDirectories(string[] directories)
@@ -207,23 +218,15 @@ namespace Final_Computer_Science_Project
             return output;
         }
 
-        private void selectedAddButton_Click(object sender, EventArgs e)
+        private async void selectedAddButton_Click(object sender, EventArgs e)
         {
             if (authToken == "" || authToken == null) //check if theyve logged into spotify, string should just be empty but check if its null just in case
             {
                 MessageBox.Show("Please login with the login button below");
             }
-            else
+            else if (audioNameCheckList.Items.Count == 0)
             {
-                var spotify = new SpotifyClient(authToken);
-            }
-        }
-
-        private async void allAddButton_Click(object sender, EventArgs e)
-        {
-            if (authToken == "" || authToken == null) //check if theyve logged into spotify, string should just be empty but check if its null just in case
-            {
-                MessageBox.Show("Please login with the login button below");
+                MessageBox.Show("Checklist empty, please search and find an audio file before you use this button");
             }
             else
             {
@@ -236,12 +239,56 @@ namespace Final_Computer_Science_Project
 
                 for (int i = 0; i < checkedItems.Count; i++)
                 {
-                    await SearchSongUri(checkedItems[i]); //searches all the songs that are checked, and adds them to the spotifySongList
+                    await SearchSongUri(checkedItems[i]); //searches all the songs that are checked, and adds them to the spotifySongLinks
                 }
 
-                await CreatePlaylist(spotify, checkedItems[0]); //creates a playlist, uses the first song as the playlist name, also stores the playlistID
-                await AddSongsToPlaylist(spotify);
-                MessageBox.Show("Playlist created on your account");
+                if (spotifySongLinks.Count == 0)
+                {
+                    MessageBox.Show("Search return no spotify songs, please use different audio files");
+                }
+                else
+                {
+                    await CreatePlaylist(spotify, checkedItems[0]); //creates a playlist, uses the first song as the playlist name, also stores the playlistID
+                    await AddSongsToPlaylist(spotify);
+                    MessageBox.Show("Playlist created on your account");
+                }
+            }
+        }
+
+        private async void allAddButton_Click(object sender, EventArgs e)
+        {
+            if (authToken == "" || authToken == null) //check if theyve logged into spotify, string should just be empty but check if its null just in case
+            {
+                MessageBox.Show("Please login with the login button below");
+            }
+            else if (audioNameCheckList.Items.Count == 0)
+            {
+                MessageBox.Show("Checklist empty, please search and find an audio file before you use this button");
+            }
+            else
+            {
+                var spotify = new SpotifyClient(authToken);
+                List<string> items = new List<string>();
+                for (int i = 0; i < audioNameCheckList.Items.Count; i++) //goes through the items and adds them to a list
+                {
+                    items.Add(audioNameCheckList.Items[i].ToString());
+                }
+
+                for (int i = 0; i < items.Count; i++)
+                {
+                    await SearchSongUri(items[i]); //searches all the songs that are checked, and adds them to the spotifySongList
+                }
+
+                if (spotifySongLinks.Count == 0)
+                {
+                    MessageBox.Show("Search return no spotify songs, please use different audio files");
+                }
+                else
+                {
+                    await CreatePlaylist(spotify, items[0]); //creates a playlist, uses the first song as the playlist name, also stores the playlistID
+                    await AddSongsToPlaylist(spotify);
+                    MessageBox.Show("Playlist created on your account");
+                }
             }
         }
 
@@ -275,7 +322,7 @@ namespace Final_Computer_Science_Project
             var searchRequest = new SearchRequest(SearchRequest.Types.Track, searchTerm);
 
             result = await spotify.Search.Item(searchRequest);
-            if (result.Tracks.Items.Count == 0 || result.Tracks.Items.Count == null) //makes sure the search returned at least one track, put null just in case
+            if (result.Tracks.Items.Count == 0 || result.Tracks.Items.Count == null) //makes sure the search returned at least one track, check for null just in case
                 noSearchResults = true;
         }
 
@@ -308,7 +355,7 @@ namespace Final_Computer_Science_Project
         public static async Task CreatePlaylist(SpotifyClient spotify, string name)
         {
             var createRequest = new PlaylistCreateRequest(name);
-            var currentUser = await spotify.UserProfile.Current(); //ONLY WORKS IF YOU ADD THE USER TO THE USERS AND DEVELOPERS ON THE SPOTIFY DASHBOARD
+            var currentUser = await spotify.UserProfile.Current(); //ONLY WORKS IF YOU ADD THE USER TO THE 'USERS AND DEVELOPERS' ON THE SPOTIFY DASHBOARD
             var createdPlaylist = await spotify.Playlists.Create(currentUser.Id, createRequest);
             playlistID = createdPlaylist.Id;
         }
@@ -359,6 +406,11 @@ namespace Final_Computer_Science_Project
         {
             string[] splithref = result.Tracks.Items[0].Href.Split("/");
             return "https://open.spotify.com/track/" + splithref[splithref.Length - 1];
+        }
+
+        private void clearButton_Click(object sender, EventArgs e)
+        {
+            audioNameCheckList.Items.Clear();
         }
     }
 }
