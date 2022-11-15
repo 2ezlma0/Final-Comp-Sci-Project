@@ -2,13 +2,15 @@ using Newtonsoft.Json.Linq;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
 using System.ComponentModel;
+using System.Configuration;
 using System.Diagnostics;
 using System.DirectoryServices;
+using System.Drawing;
 using System.Runtime.CompilerServices;
 
 namespace Final_Computer_Science_Project
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         public List<string> audioFilesNames = new List<string>();
         public List<string> searchedPaths = new List<string>();
@@ -21,12 +23,64 @@ namespace Final_Computer_Science_Project
         public static List<string> spotifySongLinks = new List<string>();
         public static SearchResponse result = new SearchResponse();
         public static bool noSearchResults = false; //assume there is search results
+        public int malpha, mred, mblue, mgreen, balpha, bred, bgreen, bblue;
+        public Color mcolor, bcolor;
+        public List<string> extensions = new List<string>();
+        public static string settingsConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "musicfinder.cfg");
+        public static string[] defaultConfigLines = new string[] { "malpha=255", "mred=252", "mgreen=252", "mblue=252", "mgreen=252", "balpha=240", "bred=240", "bgreen=240", "bblue=240", "*wav", "*m4a", "*mp3" };
+        //config line index references:
+        //0 = malpha
+        //1 = mred
+        //2 = mgreen
+        //3 = mblue
+        //4 = balpha
+        //5 = bred
+        //6 = bgreen
+        //7 = bblue
+        //8 = *wav
+        //9 = *m4a
+        //10 = *mp3
+        //any higher than this will be extra extentions for now
 
-        public Form1()
+        public MainForm()
         {
+            CheckAndReadConfig();
             InitializeComponent();
         }
 
+        private void CheckAndReadConfig()
+        {
+            if (!File.Exists(settingsConfigPath))
+            {
+                File.WriteAllLines(settingsConfigPath, defaultConfigLines);
+                SetConfigValues(defaultConfigLines);
+            }
+            else
+            {
+                string[] lines = File.ReadAllLines(settingsConfigPath);
+                SetConfigValues(lines);
+            }
+        }
+
+        private void SetConfigValues(string[] configLines)
+        {
+            malpha = Convert.ToInt32(configLines[0].Split('=')[1]); //.Split('=')[1] split the 'malpha=255' at the equals sign, then uses the second half of the string array created ('mapha=' and '255')
+            mred = Convert.ToInt32(configLines[1].Split('=')[1]);
+            mgreen = Convert.ToInt32(configLines[2].Split('=')[1]);
+            mblue = Convert.ToInt32(configLines[3].Split('=')[1]);
+            balpha = Convert.ToInt32(configLines[4].Split('=')[1]);
+            bred = Convert.ToInt32(configLines[5].Split('=')[1]);
+            bgreen = Convert.ToInt32(configLines[6].Split('=')[1]);
+            bblue = Convert.ToInt32(configLines[7].Split('=')[1]);
+            for(int i = 8; i <configLines.Length; i++)
+            {
+                extensions.Add(configLines[i]);
+            }
+
+            mcolor = Color.FromArgb(malpha, mred, mgreen, mblue);
+            bcolor = Color.FromArgb(balpha, bred, bgreen, bblue);
+        }
+       
         private void searchButton_Click(object sender, EventArgs e)
         {
             string path = directoryTextBox.Text;
@@ -139,62 +193,35 @@ namespace Final_Computer_Science_Project
         }
 
         private List<string> AudioFileSearch(string root, List<string> directories)
-        {
+        {           
             List<string> audioFiles = new List<string>();
-            string[] tempFiles = Directory.GetFiles(root, "*.mp3", SearchOption.TopDirectoryOnly); //goes through the root folder for audio files
-            if (tempFiles.Length > 0)
+            for (int x = 0; x < extensions.Count; x++)
             {
-                for (int i = 0; i < tempFiles.Length; i++)
+                string[] tempFiles = Directory.GetFiles(root, extensions[x], SearchOption.TopDirectoryOnly); //goes through the root folder for audio files
+                if (tempFiles.Length > 0)
                 {
-                    audioFiles.Add(tempFiles[i]);
-                }
-            }
-
-            string[] tempFiles1 = Directory.GetFiles(root, "*.wav", SearchOption.TopDirectoryOnly);
-            if (tempFiles1.Length > 0)
-            {
-                for (int i = 0; i < tempFiles1.Length; i++)
-                {
-                    audioFiles.Add(tempFiles1[i]);
-                }
-            }
-            string[] tempFiles2 = Directory.GetFiles(root, "*.m4a", SearchOption.TopDirectoryOnly);
-            if (tempFiles2.Length > 0)
-            {
-                for (int i = 0; i < tempFiles2.Length; i++)
-                {
-                    audioFiles.Add(tempFiles2[i]);
-                }
-            }
-
-            for (int i = 0; i < directories.Count; i++) //goes through all the subdirectories from the root path (that have been checked that theyre readable) for audio files
-            {
-                string[] tempFiles3 = Directory.GetFiles(directories[i], "*.mp3", SearchOption.TopDirectoryOnly);
-                if (tempFiles3.Length > 0)
-                {
-                    for (int j = 0; j < tempFiles3.Length; j++)
+                    for (int i = 0; i < tempFiles.Length; i++)
                     {
-                        audioFiles.Add(tempFiles3[j]);
-                    }
-                }
-                string[] tempFiles4 = Directory.GetFiles(directories[i], "*.wav", SearchOption.TopDirectoryOnly);
-                if (tempFiles4.Length > 0)
-                {
-                    for (int j = 0; j < tempFiles4.Length; j++)
-                    {
-                        audioFiles.Add(tempFiles4[j]);
-                    }
-                }
-
-                string[] tempFiles5 = Directory.GetFiles(directories[i], "*.m4a", SearchOption.TopDirectoryOnly);
-                if (tempFiles5.Length > 0)
-                {
-                    for (int j = 0; j < tempFiles5.Length; j++)
-                    {
-                        audioFiles.Add(tempFiles5[j]);
+                        audioFiles.Add(tempFiles[i]);
                     }
                 }
             }
+
+            for (int x = 0; x < extensions.Count; x++)
+            {
+                for (int i = 0; i < directories.Count; i++) //goes through all the subdirectories from the root path (that have been checked that theyre readable) for audio files
+                {
+                    string[] tempFiles3 = Directory.GetFiles(directories[i], extensions[x], SearchOption.TopDirectoryOnly);
+                    if (tempFiles3.Length > 0)
+                    {
+                        for (int j = 0; j < tempFiles3.Length; j++)
+                        {
+                            audioFiles.Add(tempFiles3[j]);
+                        }
+
+                    }
+                }
+            }  
             return audioFiles;
         }
 
@@ -421,6 +448,21 @@ namespace Final_Computer_Science_Project
         private void searchProgressBar_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void settingButton_Click(object sender, EventArgs e)
+        {
+            SettingsFormv2 settings = new SettingsFormv2();
+            settings.FormClosed += new FormClosedEventHandler(UpdateSettingsOnClose);
+            settings.Show();
+            settings.Refresh();
+        }
+
+        void UpdateSettingsOnClose(object sender, FormClosedEventArgs e)
+        {
+            CheckAndReadConfig();
+            UpdateColours();
+            MessageBox.Show("Updated settings");
         }
     }
 }

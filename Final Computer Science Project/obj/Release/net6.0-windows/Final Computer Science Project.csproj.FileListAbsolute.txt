@@ -1,0 +1,28 @@
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\bin\Release\net6.0-windows\Final Computer Science Project.exe
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\bin\Release\net6.0-windows\Final Computer Science Project.deps.json
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\bin\Release\net6.0-windows\Final Computer Science Project.runtimeconfig.json
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\bin\Release\net6.0-windows\Final Computer Science Project.dll
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\bin\Release\net6.0-windows\Final Computer Science Project.pdb
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\bin\Release\net6.0-windows\EmbedIO.dll
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\bin\Release\net6.0-windows\Newtonsoft.Json.dll
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\bin\Release\net6.0-windows\Swan.Lite.dll
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\bin\Release\net6.0-windows\SpotifyAPI.Web.Auth.dll
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\bin\Release\net6.0-windows\SpotifyAPI.Web.dll
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\bin\Release\net6.0-windows\SpotifyAPI.Web.Auth.pdb
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\bin\Release\net6.0-windows\SpotifyAPI.Web.Auth.xml
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\bin\Release\net6.0-windows\SpotifyAPI.Web.pdb
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\bin\Release\net6.0-windows\SpotifyAPI.Web.xml
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\obj\Release\net6.0-windows\Final Computer Science Project.csproj.AssemblyReference.cache
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\obj\Release\net6.0-windows\Final_Computer_Science_Project.MainForm.resources
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\obj\Release\net6.0-windows\Final_Computer_Science_Project.SettingsFormv2.resources
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\obj\Release\net6.0-windows\Final Computer Science Project.csproj.GenerateResource.cache
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\obj\Release\net6.0-windows\Final Computer Science Project.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\obj\Release\net6.0-windows\Final Computer Science Project.AssemblyInfoInputs.cache
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\obj\Release\net6.0-windows\Final Computer Science Project.AssemblyInfo.cs
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\obj\Release\net6.0-windows\Final Computer Science Project.csproj.CoreCompileInputs.cache
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\obj\Release\net6.0-windows\Final Computer Science Project.csproj.CopyComplete
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\obj\Release\net6.0-windows\Final Computer Science Project.dll
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\obj\Release\net6.0-windows\refint\Final Computer Science Project.dll
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\obj\Release\net6.0-windows\Final Computer Science Project.pdb
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\obj\Release\net6.0-windows\Final Computer Science Project.genruntimeconfig.cache
+C:\Users\test\Documents\Jacob Comp Sci Proj\Final Computer Science Project\Final Computer Science Project\obj\Release\net6.0-windows\ref\Final Computer Science Project.dll
