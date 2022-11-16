@@ -15,7 +15,6 @@ namespace Final_Computer_Science_Project
         public List<string> audioFilesNames = new List<string>();
         public List<string> searchedPaths = new List<string>();
         public bool loggedIn = false; //assume not logged in
-        public bool cleared = false; //to remove error where it tells you youve searched the path, but youve cleared the checkedlistbox so you no longer have the results
         public static EmbedIOAuthServer _server;
         public static string authToken;
         public static string clientID = "2ec60cf076b4451598cf045659a32756";
@@ -28,7 +27,7 @@ namespace Final_Computer_Science_Project
         public Color mcolor, bcolor;
         public List<string> extensions = new List<string>();
         public static string settingsConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "musicfinder.cfg");
-        public static string[] defaultConfigLines = new string[] { "malpha=255", "mred=252", "mgreen=252", "mblue=252", "balpha=240", "bred=240", "bgreen=240", "bblue=240", "*.wav!", "*.m4a!", "*.mp3!" };
+        public static string[] defaultConfigLines = new string[] { "malpha=255", "mred=252", "mgreen=252", "mblue=252", "mgreen=252", "balpha=240", "bred=240", "bgreen=240", "bblue=240", "*wav", "*m4a", "*mp3" };
         //config line index references:
         //0 = malpha
         //1 = mred
@@ -42,7 +41,6 @@ namespace Final_Computer_Science_Project
         //9 = *m4a
         //10 = *mp3
         //any higher than this will be extra extentions for now
-        //('!' at the end of extension to show it is checked)
 
         public MainForm()
         {
@@ -76,8 +74,7 @@ namespace Final_Computer_Science_Project
             bblue = Convert.ToInt32(configLines[7].Split('=')[1]);
             for(int i = 8; i <configLines.Length; i++)
             {
-                if (configLines[i][configLines[i].Length - 1] == '!')
-                    extensions.Add(configLines[i].Split('!')[0]); //splits the checked extensions at the symbol determing whether theyre checked or not
+                extensions.Add(configLines[i]);
             }
 
             mcolor = Color.FromArgb(malpha, mred, mgreen, mblue);
@@ -94,14 +91,13 @@ namespace Final_Computer_Science_Project
                 path = drives[0].Name;
             }
 
-            if (searchedPaths.Contains(path) && !cleared)
+            if (searchedPaths.Contains(path))
             {
                 MessageBox.Show("Path has already been searched for");
             }
             else
             {
                 searchedPaths.Add(path); //adds the path to a list of searched paths to not duplicate results in the checkedlist
-                cleared = false;
                 List<string> accessableDirectories = CheckAccessableDirectories(Directory.GetDirectories(path)); //first layer of subdirectories that are accessable
                 List<string> audioFiles = new List<string>();
                 List<string> directoriesToCheck = accessableDirectories; //sets first list to check the accessable directories already found on the first layer
@@ -442,7 +438,6 @@ namespace Final_Computer_Science_Project
         private void clearButton_Click(object sender, EventArgs e)
         {
             audioNameCheckList.Items.Clear();
-            cleared = true;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -468,12 +463,6 @@ namespace Final_Computer_Science_Project
             CheckAndReadConfig();
             UpdateColours();
             MessageBox.Show("Updated settings");
-        }
-
-        public void ResetConfigFile()
-        {
-            File.Delete(settingsConfigPath);
-            File.WriteAllLines(settingsConfigPath, defaultConfigLines);
         }
     }
 }
