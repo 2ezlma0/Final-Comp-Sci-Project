@@ -66,6 +66,7 @@ namespace Final_Computer_Science_Project
 
         private void SetConfigValues(string[] configLines)
         {
+            extensions.Clear(); //resets extension list (might solve the reason why sometimes extensions searched didnt update)
             malpha = Convert.ToInt32(configLines[0].Split('=')[1]); //.Split('=')[1] split the 'malpha=255' at the equals sign, then uses the second half of the string array created ('mapha=' and '255')
             mred = Convert.ToInt32(configLines[1].Split('=')[1]);
             mgreen = Convert.ToInt32(configLines[2].Split('=')[1]);
