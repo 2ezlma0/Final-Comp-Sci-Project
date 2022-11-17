@@ -38,9 +38,9 @@ namespace Final_Computer_Science_Project
         //5 = bred
         //6 = bgreen
         //7 = bblue
-        //8 = *wav
-        //9 = *m4a
-        //10 = *mp3
+        //8 = *.wav
+        //9 = *.m4a
+        //10 = *.mp3
         //any higher than this will be extra extentions for now
         //('!' at the end of extension to show it is checked)
 
@@ -78,7 +78,7 @@ namespace Final_Computer_Science_Project
             for(int i = 8; i <configLines.Length; i++)
             {
                 if (configLines[i][configLines[i].Length - 1] == '!')
-                    extensions.Add(configLines[i].Split('!')[0]); //splits the checked extensions at the symbol determing whether theyre checked or not
+                    extensions.Add(configLines[i].Split('!')[0]); //splits the checked extensions at the symbol determining whether theyre checked or not
             }
 
             mcolor = Color.FromArgb(malpha, mred, mgreen, mblue);

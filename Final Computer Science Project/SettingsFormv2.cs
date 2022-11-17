@@ -26,9 +26,9 @@ namespace Final_Computer_Science_Project
         //5 = bred
         //6 = bgreen
         //7 = bblue
-        //8 = *wav
-        //9 = *m4a
-        //10 = *mp3
+        //8 = *.wav
+        //9 = *.m4a
+        //10 = *.mp3
         //any higher than this will be extra extentions for now
 
         public SettingsFormv2()
