@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.LinkLabel;
 
 namespace Final_Computer_Science_Project
 {
@@ -26,10 +28,13 @@ namespace Final_Computer_Science_Project
         //5 = bred
         //6 = bgreen
         //7 = bblue
-        //8 = *.wav
-        //9 = *.m4a
-        //10 = *.mp3
+        //8 = cclientID (configclientID)
+        //9 = cclientSecret (configclientSecret)
+        //10 = *.wav
+        //11 = *.m4a
+        //12 = *.mp3
         //any higher than this will be extra extentions for now
+        //('!' at the end of extension to show it is checked)
 
         public SettingsFormv2()
         {
@@ -65,6 +70,40 @@ namespace Final_Computer_Science_Project
 
         }
 
+        private void clientIDTextbox_TextChanged(object sender, EventArgs e)
+        {
+          
+        }
+
+        private void clientSecretTextbox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void updateClientButton_Click(object sender, EventArgs e)
+        {
+            string[] settings = File.ReadAllLines(settingsConfigPath);
+            if (clientIDTextbox.Text == "" || clientSecretTextbox.Text == "" || clientIDTextbox.Text == settings[8] || clientSecretTextbox.Text == settings[9])
+            {
+                MessageBox.Show("Textboxes left blank or one or more boxes unedited, no changes made");
+            }
+            else
+            {
+                settings[8] = clientIDTextbox.Text;
+                settings[9] = clientSecretTextbox.Text;
+                File.Delete(settingsConfigPath);
+                File.WriteAllLines(settingsConfigPath, settings);
+                MessageBox.Show("Updated");
+            }
+            
+        }
+
+        private void openSpotifyDashboardButton_Click(object sender, EventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("https://developer.spotify.com/dashboard/applications") { UseShellExecute = true }); //new .net version needs this UseShellExecute thing (thanks stack overflow)
+            MessageBox.Show("Create a new application and paste both the clientID and client secret into this application to make the creation of playlists work");
+        }
+
         private void mcolorButton_Click(object sender, EventArgs e)
         {
             ColorDialog dlg = new ColorDialog();
@@ -90,7 +129,7 @@ namespace Final_Computer_Science_Project
         {
             string[] settings = File.ReadAllLines(settingsConfigPath);
 
-            for (int i = 8; i < settings.Length; i++)
+            for (int i = 10; i < settings.Length; i++)
                 extensions.Add(settings[i]);
 
             extensionsCheckedListBox.Items.Clear();
@@ -107,6 +146,7 @@ namespace Final_Computer_Science_Project
                     extensionsCheckedListBox.Items.Add(extensions[i]);
                 }
             }
+            UpdateClientTextboxes(settings);
         }
 
         private void Form2_Load(object sender, EventArgs e)

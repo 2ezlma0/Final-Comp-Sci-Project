@@ -6,6 +6,8 @@ using System.Configuration;
 using System.Diagnostics;
 using System.DirectoryServices;
 using System.Drawing;
+using System.IO;
+using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 
 namespace Final_Computer_Science_Project
@@ -24,11 +26,12 @@ namespace Final_Computer_Science_Project
         public static List<string> spotifySongLinks = new List<string>();
         public static SearchResponse result = new SearchResponse();
         public static bool noSearchResults = false; //assume there is search results
-        public int malpha, mred, mblue, mgreen, balpha, bred, bgreen, bblue;
+        public int malpha, mred, mblue, mgreen, balpha, bred, bgreen, bblue; //for config
+        public static string? cclientID, cclientSecret; //for config
         public Color mcolor, bcolor;
         public List<string> extensions = new List<string>();
         public static string settingsConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "musicfinder.cfg");
-        public static string[] defaultConfigLines = new string[] { "malpha=255", "mred=252", "mgreen=252", "mblue=252", "balpha=240", "bred=240", "bgreen=240", "bblue=240", "*.wav!", "*.m4a!", "*.mp3!" };
+        public static string[] defaultConfigLines = new string[] { "malpha=255", "mred=252", "mgreen=252", "mblue=252", "balpha=240", "bred=240", "bgreen=240", "bblue=240", "", "", "*.wav!", "*.m4a!", "*.mp3!" };
         //config line index references:
         //0 = malpha
         //1 = mred
@@ -38,9 +41,11 @@ namespace Final_Computer_Science_Project
         //5 = bred
         //6 = bgreen
         //7 = bblue
-        //8 = *.wav
-        //9 = *.m4a
-        //10 = *.mp3
+        //8 = cclientID (configclientID)
+        //9 = cclientSecret (configclientSecret)
+        //10 = *.wav
+        //11 = *.m4a
+        //12 = *.mp3
         //any higher than this will be extra extentions for now
         //('!' at the end of extension to show it is checked)
 
@@ -75,7 +80,11 @@ namespace Final_Computer_Science_Project
             bred = Convert.ToInt32(configLines[5].Split('=')[1]);
             bgreen = Convert.ToInt32(configLines[6].Split('=')[1]);
             bblue = Convert.ToInt32(configLines[7].Split('=')[1]);
-            for(int i = 8; i <configLines.Length; i++)
+            if (configLines[8] != "") //if config is empty then we use the default clientID and secret
+                cclientID = configLines[8];
+            if (configLines[9] != "")
+                cclientSecret = configLines[9];
+            for(int i = 10; i <configLines.Length; i++)
             {
                 if (configLines[i][configLines[i].Length - 1] == '!')
                     extensions.Add(configLines[i].Split('!')[0]); //splits the checked extensions at the symbol determining whether theyre checked or not
@@ -98,6 +107,10 @@ namespace Final_Computer_Science_Project
             if (searchedPaths.Contains(path) && !cleared)
             {
                 MessageBox.Show("Path has already been searched for");
+            }
+            else if (path.Length > 259)
+            {
+                MessageBox.Show("Path too long"); //windows limits paths in c# to go up to 260characters
             }
             else
             {
@@ -157,35 +170,38 @@ namespace Final_Computer_Science_Project
             for (int i = 0; i < directories.Length; i++)
             {
                 accessable = false;
-
-                try
-                {
-                    string[] temp = Directory.GetFiles(directories[i]);
-                    if (temp != null) //checks if it can access files (and directories in the next try), if it cant read them the string array's value is null, therefore if it isnt then the directory is readable
-                    {
-                        accessable = true;
-                    }
-                }
-                catch (UnauthorizedAccessException) //just in case it causes an error
-                {
-
-                }
-
-                if (!accessable)
+                if (directories[i].Length < 260) //windows limits paths in c# to go up to 260characters
                 {
                     try
                     {
-                        string[] temp2 = Directory.GetDirectories(directories[i]);
-                        if (temp2 != null)
+                        string[] temp = Directory.GetFiles(directories[i]);
+                        if (temp != null) //checks if it can access files (and directories in the next try), if it cant read them the string array's value is null, therefore if it isnt then the directory is readable
                         {
                             accessable = true;
                         }
                     }
-                    catch (UnauthorizedAccessException)
+                    catch (UnauthorizedAccessException) //just in case it causes an error
                     {
 
                     }
+
+                    if (!accessable)
+                    {
+                        try
+                        {
+                            string[] temp2 = Directory.GetDirectories(directories[i]);
+                            if (temp2 != null)
+                            {
+                                accessable = true;
+                            }
+                        }
+                        catch (UnauthorizedAccessException)
+                        {
+
+                        }
+                    }
                 }
+                
 
                 //if (directories[i] == "C:\\Documents and Settings" || directories[i] == "C:\\System Volume Information")
                 //   accessable = false;
@@ -278,6 +294,10 @@ namespace Final_Computer_Science_Project
                 {
                     MessageBox.Show("Search return no spotify songs, please use different audio files");
                 }
+                else if (spotifySongLinks.Count > 100)
+                {
+                    MessageBox.Show("Exceeded 100 tracks maximum");
+                }
                 else
                 {
                     await CreatePlaylist(spotify, checkedItems[0]); //creates a playlist, uses the first song as the playlist name, also stores the playlistID
@@ -315,6 +335,10 @@ namespace Final_Computer_Science_Project
                 {
                     MessageBox.Show("Search return no spotify songs, please use different audio files");
                 }
+                else if(spotifySongLinks.Count > 100)
+                {
+                    MessageBox.Show("Exceeded 100 tracks maximum");
+                }
                 else
                 {
                     await CreatePlaylist(spotify, items[0]); //creates a playlist, uses the first song as the playlist name, also stores the playlistID
@@ -344,9 +368,23 @@ namespace Final_Computer_Science_Project
 
         public static async Task Search(string searchTerm)
         {
+            string ID = "";
+            string secret = "";
             var config = SpotifyClientConfig.CreateDefault();
 
-            var request = new ClientCredentialsRequest(clientID, clientSecret);
+            if(cclientID == null || cclientID == "" || cclientSecret == null || cclientSecret == "")
+            {
+                ID = clientID;
+                secret = clientSecret;
+            }
+            else
+            {
+                ID = cclientID;
+                secret = cclientSecret;
+            }
+
+
+            var request = new ClientCredentialsRequest(ID, secret);
             var response = await new OAuthClient(config).RequestToken(request);
 
             var spotify = new SpotifyClient(config.WithToken(response.AccessToken));
@@ -407,7 +445,21 @@ namespace Final_Computer_Science_Project
             _server.AuthorizationCodeReceived += OnAuthorizationCodeReceived;
             _server.ErrorReceived += OnErrorReceived;
 
-            var request = new LoginRequest(_server.BaseUri, clientID, LoginRequest.ResponseType.Code)
+            string ID = "";
+            string secret = "";
+
+            if (cclientID == null || cclientID == "" || cclientSecret == null || cclientSecret == "")
+            {
+                ID = clientID;
+                secret = clientSecret;
+            }
+            else
+            {
+                ID = cclientID;
+                secret = cclientSecret;
+            }
+
+            var request = new LoginRequest(_server.BaseUri, ID, LoginRequest.ResponseType.Code)
             {
                 Scope = new List<string> { Scopes.UserReadEmail, Scopes.PlaylistModifyPrivate, Scopes.PlaylistModifyPublic, Scopes.PlaylistReadCollaborative, Scopes.PlaylistReadPrivate, Scopes.UserReadPrivate, Scopes.AppRemoteControl, Scopes.UserLibraryRead, Scopes.UserLibraryModify } //what permissions to ask for
             };
@@ -418,10 +470,23 @@ namespace Final_Computer_Science_Project
         {
             await _server.Stop();
 
+            string ID = "";
+            string secret = "";
+            if (cclientID == null || cclientID == "" || cclientSecret == null || cclientSecret == "")
+            {
+                ID = clientID;
+                secret = clientSecret;
+            }
+            else
+            {
+                ID = cclientID;
+                secret = cclientSecret;
+            }
+
             var config = SpotifyClientConfig.CreateDefault();
             var tokenResponse = await new OAuthClient(config).RequestToken(
               new AuthorizationCodeTokenRequest(
-                clientID, clientSecret, response.Code, new Uri("http://localhost:5000/callback")
+                ID, secret, response.Code, new Uri("http://localhost:5000/callback")
               )
             );
 
@@ -468,7 +533,6 @@ namespace Final_Computer_Science_Project
         {
             CheckAndReadConfig();
             UpdateColours();
-            MessageBox.Show("Updated settings");
         }
 
         public void ResetConfigFile()

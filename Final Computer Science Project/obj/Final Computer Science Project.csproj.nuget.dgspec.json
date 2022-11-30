@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\test\\Documents\\Jacob Comp Sci Proj\\Final Computer Science Project\\Final Computer Science Project\\Final Computer Science Project.csproj": {}
+    "E:\\Jacob Comp Sci Proj\\Final Computer Science Project\\Final Computer Science Project\\Final Computer Science Project.csproj": {}
   },
   "projects": {
-    "C:\\Users\\test\\Documents\\Jacob Comp Sci Proj\\Final Computer Science Project\\Final Computer Science Project\\Final Computer Science Project.csproj": {
+    "E:\\Jacob Comp Sci Proj\\Final Computer Science Project\\Final Computer Science Project\\Final Computer Science Project.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\test\\Documents\\Jacob Comp Sci Proj\\Final Computer Science Project\\Final Computer Science Project\\Final Computer Science Project.csproj",
+        "projectUniqueName": "E:\\Jacob Comp Sci Proj\\Final Computer Science Project\\Final Computer Science Project\\Final Computer Science Project.csproj",
         "projectName": "Final Computer Science Project",
-        "projectPath": "C:\\Users\\test\\Documents\\Jacob Comp Sci Proj\\Final Computer Science Project\\Final Computer Science Project\\Final Computer Science Project.csproj",
+        "projectPath": "E:\\Jacob Comp Sci Proj\\Final Computer Science Project\\Final Computer Science Project\\Final Computer Science Project.csproj",
         "packagesPath": "C:\\Users\\test\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\test\\Documents\\Jacob Comp Sci Proj\\Final Computer Science Project\\Final Computer Science Project\\obj\\",
+        "outputPath": "E:\\Jacob Comp Sci Proj\\Final Computer Science Project\\Final Computer Science Project\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\test\\AppData\\Roaming\\NuGet\\NuGet.Config",

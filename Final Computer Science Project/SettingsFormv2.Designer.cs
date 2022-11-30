@@ -38,6 +38,12 @@
             this.extensionTextBox = new System.Windows.Forms.TextBox();
             this.resetButton = new System.Windows.Forms.Button();
             this.confirmExtensionsButton = new System.Windows.Forms.Button();
+            this.clientSecretTextbox = new System.Windows.Forms.TextBox();
+            this.clientIDTextbox = new System.Windows.Forms.TextBox();
+            this.updateClientButton = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.openSpotifyDashboardButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // mcolorButton
@@ -117,11 +123,71 @@
             this.confirmExtensionsButton.UseVisualStyleBackColor = true;
             this.confirmExtensionsButton.Click += new System.EventHandler(this.confirmExtensionsButton_Click);
             // 
+            // clientSecretTextbox
+            // 
+            this.clientSecretTextbox.Location = new System.Drawing.Point(240, 300);
+            this.clientSecretTextbox.Name = "clientSecretTextbox";
+            this.clientSecretTextbox.Size = new System.Drawing.Size(144, 23);
+            this.clientSecretTextbox.TabIndex = 8;
+            this.clientSecretTextbox.TextChanged += new System.EventHandler(this.clientSecretTextbox_TextChanged);
+            // 
+            // clientIDTextbox
+            // 
+            this.clientIDTextbox.Location = new System.Drawing.Point(240, 246);
+            this.clientIDTextbox.Name = "clientIDTextbox";
+            this.clientIDTextbox.Size = new System.Drawing.Size(144, 23);
+            this.clientIDTextbox.TabIndex = 9;
+            this.clientIDTextbox.TextChanged += new System.EventHandler(this.clientIDTextbox_TextChanged);
+            // 
+            // updateClientButton
+            // 
+            this.updateClientButton.Location = new System.Drawing.Point(240, 329);
+            this.updateClientButton.Name = "updateClientButton";
+            this.updateClientButton.Size = new System.Drawing.Size(144, 45);
+            this.updateClientButton.TabIndex = 10;
+            this.updateClientButton.Text = "Update Client ID and Secret";
+            this.updateClientButton.UseVisualStyleBackColor = true;
+            this.updateClientButton.Click += new System.EventHandler(this.updateClientButton_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(240, 228);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(50, 15);
+            this.label2.TabIndex = 11;
+            this.label2.Text = "client ID";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(240, 282);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(70, 15);
+            this.label3.TabIndex = 12;
+            this.label3.Text = "client secret";
+            // 
+            // openSpotifyDashboardButton
+            // 
+            this.openSpotifyDashboardButton.Location = new System.Drawing.Point(240, 158);
+            this.openSpotifyDashboardButton.Name = "openSpotifyDashboardButton";
+            this.openSpotifyDashboardButton.Size = new System.Drawing.Size(144, 57);
+            this.openSpotifyDashboardButton.TabIndex = 13;
+            this.openSpotifyDashboardButton.Text = "    Spotify Dashboard       (for setting up clientID and secret)";
+            this.openSpotifyDashboardButton.UseVisualStyleBackColor = true;
+            this.openSpotifyDashboardButton.Click += new System.EventHandler(this.openSpotifyDashboardButton_Click);
+            // 
             // SettingsFormv2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(396, 450);
+            this.Controls.Add(this.openSpotifyDashboardButton);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.updateClientButton);
+            this.Controls.Add(this.clientIDTextbox);
+            this.Controls.Add(this.clientSecretTextbox);
             this.Controls.Add(this.confirmExtensionsButton);
             this.Controls.Add(this.resetButton);
             this.Controls.Add(this.extensionTextBox);
@@ -146,11 +212,19 @@
             addExtensionButton.BackColor = bcolor;
             confirmExtensionsButton.BackColor = bcolor;
             resetButton.BackColor = bcolor;
+            updateClientButton.BackColor = bcolor;
+            openSpotifyDashboardButton.BackColor = bcolor;
         }
 
         void ChangeMColour()
         {
             this.BackColor = mcolor;
+        }
+
+        void UpdateClientTextboxes(string[] settings)
+        {
+            clientIDTextbox.Text = settings[8];
+            clientSecretTextbox.Text = settings[9];
         }
 
         private Button mcolorButton;
@@ -163,5 +237,11 @@
         private TextBox extensionTextBox;
         private Button resetButton;
         private Button confirmExtensionsButton;
+        private TextBox clientSecretTextbox;
+        private TextBox clientIDTextbox;
+        private Button updateClientButton;
+        private Label label2;
+        private Label label3;
+        private Button openSpotifyDashboardButton;
     }
 }
