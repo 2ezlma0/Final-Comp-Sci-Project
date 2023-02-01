@@ -83,9 +83,9 @@ namespace Final_Computer_Science_Project
         private void updateClientButton_Click(object sender, EventArgs e)
         {
             string[] settings = File.ReadAllLines(settingsConfigPath);
-            if (clientIDTextbox.Text == "" || clientSecretTextbox.Text == "" || clientIDTextbox.Text == settings[8] || clientSecretTextbox.Text == settings[9])
+            if (clientIDTextbox.Text == "" || clientSecretTextbox.Text == "" || clientIDTextbox.Text == settings[8] && clientSecretTextbox.Text == settings[9])
             {
-                MessageBox.Show("Textboxes left blank or one or more boxes unedited, no changes made");
+                MessageBox.Show("Textboxes left unchanged, or one or more textboxes empty, no updates to the config file made");
             }
             else
             {

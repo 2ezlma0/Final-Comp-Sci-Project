@@ -37,11 +37,12 @@ namespace Final_Computer_Science_Project
             this.audioNameCheckList = new System.Windows.Forms.CheckedListBox();
             this.selectedAddButton = new System.Windows.Forms.Button();
             this.allAddButton = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
             this.loginButton = new System.Windows.Forms.Button();
             this.openButton = new System.Windows.Forms.Button();
             this.clearButton = new System.Windows.Forms.Button();
             this.settingButton = new System.Windows.Forms.Button();
+            this.exportButton = new System.Windows.Forms.Button();
+            this.browseButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // directoryTextBox
@@ -69,7 +70,6 @@ namespace Final_Computer_Science_Project
             this.searchButton.TabIndex = 2;
             this.searchButton.Text = "Search";
             this.searchButton.UseVisualStyleBackColor = true;
-            this.searchButton.BackColor = bcolor;
             this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
             // 
             // audioNameCheckList
@@ -88,7 +88,6 @@ namespace Final_Computer_Science_Project
             this.selectedAddButton.TabIndex = 5;
             this.selectedAddButton.Text = "Search and add selected to playlist";
             this.selectedAddButton.UseVisualStyleBackColor = true;
-            this.selectedAddButton.BackColor = bcolor;
             this.selectedAddButton.Click += new System.EventHandler(this.selectedAddButton_Click);
             // 
             // allAddButton
@@ -99,17 +98,7 @@ namespace Final_Computer_Science_Project
             this.allAddButton.TabIndex = 6;
             this.allAddButton.Text = "Search and add all to playlist";
             this.allAddButton.UseVisualStyleBackColor = true;
-            this.allAddButton.BackColor = bcolor;
             this.allAddButton.Click += new System.EventHandler(this.allAddButton_Click);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(49, 192);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(245, 15);
-            this.label2.TabIndex = 7;
-            this.label2.Text = "These buttons use the top result in the search";
             // 
             // loginButton
             // 
@@ -119,7 +108,6 @@ namespace Final_Computer_Science_Project
             this.loginButton.TabIndex = 9;
             this.loginButton.Text = "Login";
             this.loginButton.UseVisualStyleBackColor = true;
-            this.loginButton.BackColor = bcolor;
             this.loginButton.Click += new System.EventHandler(this.loginButton_Click);
             // 
             // openButton
@@ -130,7 +118,6 @@ namespace Final_Computer_Science_Project
             this.openButton.TabIndex = 11;
             this.openButton.Text = "Open selected with Spotify";
             this.openButton.UseVisualStyleBackColor = true;
-            this.openButton.BackColor = bcolor;
             this.openButton.Click += new System.EventHandler(this.openButton_Click);
             // 
             // clearButton
@@ -141,7 +128,6 @@ namespace Final_Computer_Science_Project
             this.clearButton.TabIndex = 12;
             this.clearButton.Text = "Clear";
             this.clearButton.UseVisualStyleBackColor = true;
-            this.clearButton.BackColor = bcolor;
             this.clearButton.Click += new System.EventHandler(this.clearButton_Click);
             // 
             // settingButton
@@ -152,27 +138,46 @@ namespace Final_Computer_Science_Project
             this.settingButton.TabIndex = 13;
             this.settingButton.Text = "Settings";
             this.settingButton.UseVisualStyleBackColor = true;
-            this.settingButton.BackColor = bcolor;
             this.settingButton.Click += new System.EventHandler(this.settingButton_Click);
             // 
-            // Form1
+            // exportButton
+            // 
+            this.exportButton.Location = new System.Drawing.Point(356, 210);
+            this.exportButton.Name = "exportButton";
+            this.exportButton.Size = new System.Drawing.Size(96, 61);
+            this.exportButton.TabIndex = 14;
+            this.exportButton.Text = "Export selected (text file of links)";
+            this.exportButton.UseVisualStyleBackColor = true;
+            this.exportButton.Click += new System.EventHandler(this.exportButton_Click);
+            // 
+            // browseButton
+            // 
+            this.browseButton.Location = new System.Drawing.Point(49, 113);
+            this.browseButton.Name = "browseButton";
+            this.browseButton.Size = new System.Drawing.Size(109, 23);
+            this.browseButton.TabIndex = 15;
+            this.browseButton.Text = "Browse local files";
+            this.browseButton.UseVisualStyleBackColor = true;
+            this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
+            // 
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.BackColor = mcolor;
+            this.Controls.Add(this.browseButton);
+            this.Controls.Add(this.exportButton);
             this.Controls.Add(this.settingButton);
             this.Controls.Add(this.clearButton);
             this.Controls.Add(this.openButton);
             this.Controls.Add(this.loginButton);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.allAddButton);
             this.Controls.Add(this.selectedAddButton);
             this.Controls.Add(this.audioNameCheckList);
             this.Controls.Add(this.searchButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.directoryTextBox);
-            this.Name = "Music Finder";
+            this.Name = "MainForm";
             this.Text = "Music Finder";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
@@ -190,6 +195,8 @@ namespace Final_Computer_Science_Project
             openButton.BackColor = bcolor;
             clearButton.BackColor = bcolor;
             settingButton.BackColor = bcolor;
+            exportButton.BackColor = bcolor;
+            browseButton.BackColor = bcolor;
             this.BackColor = mcolor;
         }
 
@@ -199,10 +206,11 @@ namespace Final_Computer_Science_Project
         public CheckedListBox audioNameCheckList;
         public Button selectedAddButton;
         public Button allAddButton;
-        public Label label2;
         public Button loginButton;
         public Button openButton;
         public Button clearButton;
         public Button settingButton;
+        public Button exportButton;
+        private Button browseButton;
     }
 }

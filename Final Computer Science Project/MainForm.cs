@@ -9,6 +9,7 @@ using System.Drawing;
 using System.IO;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
+using System.Windows.Forms;
 
 namespace Final_Computer_Science_Project
 {
@@ -20,8 +21,8 @@ namespace Final_Computer_Science_Project
         public bool cleared = false; //to remove error where it tells you youve searched the path, but youve cleared the checkedlistbox so you no longer have the results
         public static EmbedIOAuthServer _server;
         public static string authToken;
-        public static string clientID = "2ec60cf076b4451598cf045659a32756";
-        public static string clientSecret = "1e4d597acfbe4132a827c6c38b66619f"; //client id and secret for app i created at https://developer.spotify.com/dashboard/applications
+        public static string clientID = "0bacb54806ab45a68f5c94a66591f19e";
+        public static string clientSecret = "cd8a8a79499b4f2dab1da538c5b59194"; //client id and secret for app i created at https://developer.spotify.com/dashboard/applications
         public static string playlistID;
         public static List<string> spotifySongLinks = new List<string>();
         public static SearchResponse result = new SearchResponse();
@@ -166,7 +167,7 @@ namespace Final_Computer_Science_Project
         private List<string> CheckAccessableDirectories(string[] directories)
         {
             List<string> accessableDirectories = new List<string>();
-            bool accessable = false;
+            bool accessable;
             for (int i = 0; i < directories.Length; i++)
             {
                 accessable = false;
@@ -268,6 +269,9 @@ namespace Final_Computer_Science_Project
 
         private async void selectedAddButton_Click(object sender, EventArgs e)
         {
+            if(spotifySongLinks.Count != 0)
+                spotifySongLinks.Clear();
+
             if (authToken == "" || authToken == null) //check if theyve logged into spotify, string should just be empty but check if its null just in case
             {
                 MessageBox.Show("Please login with the login button below");
@@ -292,7 +296,7 @@ namespace Final_Computer_Science_Project
 
                 if (spotifySongLinks.Count == 0)
                 {
-                    MessageBox.Show("Search return no spotify songs, please use different audio files");
+                    MessageBox.Show("Search returned no spotify songs, please use different audio files");
                 }
                 else if (spotifySongLinks.Count > 100)
                 {
@@ -309,6 +313,9 @@ namespace Final_Computer_Science_Project
 
         private async void allAddButton_Click(object sender, EventArgs e)
         {
+            if (spotifySongLinks.Count != 0)
+                spotifySongLinks.Clear();
+
             if (authToken == "" || authToken == null) //check if theyve logged into spotify, string should just be empty but check if its null just in case
             {
                 MessageBox.Show("Please login with the login button below");
@@ -333,7 +340,7 @@ namespace Final_Computer_Science_Project
 
                 if (spotifySongLinks.Count == 0)
                 {
-                    MessageBox.Show("Search return no spotify songs, please use different audio files");
+                    MessageBox.Show("Search returned no spotify songs, please use different audio files");
                 }
                 else if(spotifySongLinks.Count > 100)
                 {
@@ -364,6 +371,61 @@ namespace Final_Computer_Science_Project
                 string selectedString = audioNameCheckList.Text;
                 await SearchAndOpenSpotifyLink(selectedString);
             }
+        }
+
+
+        private void browseButton_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog openFile = new FolderBrowserDialog();
+            if (openFile.ShowDialog() == DialogResult.OK) // Test result.
+            {
+                directoryTextBox.Text = openFile.SelectedPath;
+            }
+        }
+
+        private async void exportButton_Click(object sender, EventArgs e)
+        {
+            List<string> checkedItems = new List<string>();
+            if (audioNameCheckList.CheckedItems.Count == 0)
+            {
+                MessageBox.Show("Checklist empty or no items checked, please search and check at least one audio file before you use this button");
+            }
+            else
+            {
+                for (int i = 0; i < audioNameCheckList.CheckedItems.Count; i++) //goes through the checked items and adds them to a list
+                {
+                    checkedItems.Add(audioNameCheckList.CheckedItems[i].ToString());
+                }
+
+                List<string> resultLinks = new List<string>();
+                for (int i = 0; i < checkedItems.Count; i++) //searches all the songs that are checked, turns them into spotify links, then adds them to resultLinks
+                {
+                    await Search(checkedItems[i]); 
+                    if (!noSearchResults)
+                    {
+                        resultLinks.Add(CreateSpotifyLink(result));
+                    }
+                }
+
+                if (resultLinks.Count == 0)
+                {
+                    MessageBox.Show("Search returned no spotify songs, please use different audio files");
+                }
+                else
+                {
+                    ExportToDocuments(resultLinks);
+                }
+            }
+
+        }
+
+        private void ExportToDocuments(List<string> links)
+        {
+            Random rand = new Random();
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "spotifylinks" + rand.Next(0, 1000000000).ToString() + ".txt");
+
+            File.WriteAllLines(path, links);
+            MessageBox.Show("Exported at " + path);
         }
 
         public static async Task Search(string searchTerm)
