@@ -43,6 +43,7 @@ namespace Final_Computer_Science_Project
             this.settingButton = new System.Windows.Forms.Button();
             this.exportButton = new System.Windows.Forms.Button();
             this.browseButton = new System.Windows.Forms.Button();
+            this.spotifyAccountLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // directoryTextBox
@@ -160,11 +161,21 @@ namespace Final_Computer_Science_Project
             this.browseButton.UseVisualStyleBackColor = true;
             this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
             // 
+            // spotifyAccountLabel
+            // 
+            this.spotifyAccountLabel.AutoSize = true;
+            this.spotifyAccountLabel.Location = new System.Drawing.Point(130, 403);
+            this.spotifyAccountLabel.Name = "spotifyAccountLabel";
+            this.spotifyAccountLabel.Size = new System.Drawing.Size(80, 15);
+            this.spotifyAccountLabel.TabIndex = 16;
+            this.spotifyAccountLabel.Text = "Not logged in";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.spotifyAccountLabel);
             this.Controls.Add(this.browseButton);
             this.Controls.Add(this.exportButton);
             this.Controls.Add(this.settingButton);
@@ -212,5 +223,6 @@ namespace Final_Computer_Science_Project
         public Button settingButton;
         public Button exportButton;
         private Button browseButton;
+        private Label spotifyAccountLabel;
     }
 }

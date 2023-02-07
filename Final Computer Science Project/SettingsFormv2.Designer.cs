@@ -197,7 +197,7 @@
             this.Controls.Add(this.bcolorButton);
             this.Controls.Add(this.mcolorButton);
             this.Name = "SettingsFormv2";
-            this.Text = "SettingsFormv2";
+            this.Text = "Settings";
             this.Load += new System.EventHandler(this.Form2_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
