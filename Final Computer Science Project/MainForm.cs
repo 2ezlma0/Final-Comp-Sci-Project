@@ -54,6 +54,7 @@ namespace Final_Computer_Science_Project
         {
             CheckAndReadConfig();
             InitializeComponent();
+            UpdateColours();
         }
 
         private void CheckAndReadConfig()
@@ -357,7 +358,7 @@ namespace Final_Computer_Science_Project
 
         private async void loginButton_Click(object sender, EventArgs e)
         {
-            await Login();           
+            await Login();          
             spotifyAccountLabel.Text = "Logged in";
         }
 

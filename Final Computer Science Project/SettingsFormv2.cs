@@ -101,7 +101,7 @@ namespace Final_Computer_Science_Project
         private void openSpotifyDashboardButton_Click(object sender, EventArgs e)
         {
             Process.Start(new ProcessStartInfo("https://developer.spotify.com/dashboard/applications") { UseShellExecute = true }); //new .net version needs this UseShellExecute thing (thanks stack overflow)
-            MessageBox.Show("Create a new application and paste both the clientID and client secret into this application to make the creation of playlists work");
+            MessageBox.Show("Create a new application (add yourself as a developer to this spotify application) and paste both the clientID and client secret into this application to make the creation of playlists work, YOU MUST SET THE REDIRECT URI TO: http://localhost:5000/callback");
         }
 
         private void mcolorButton_Click(object sender, EventArgs e)
@@ -170,12 +170,12 @@ namespace Final_Computer_Science_Project
         {
             string[] settings = File.ReadAllLines(settingsConfigPath);
 
-            for(int i = 8; i < settings.Length; i++)
+            for(int i = 10; i < settings.Length; i++)
             {
-                if (extensionsCheckedListBox.GetItemChecked(i - 8))
-                    settings[i] = extensionsCheckedListBox.Items[i - 8] + "!";
+                if (extensionsCheckedListBox.GetItemChecked(i - 10))
+                    settings[i] = extensionsCheckedListBox.Items[i - 10] + "!";
                 else
-                    settings[i] = extensionsCheckedListBox.Items[i - 8].ToString();
+                    settings[i] = extensionsCheckedListBox.Items[i - 10].ToString();
             }
 
             File.Delete(settingsConfigPath);
