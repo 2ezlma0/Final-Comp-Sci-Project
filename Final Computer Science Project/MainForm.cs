@@ -118,9 +118,9 @@ namespace Final_Computer_Science_Project
             {
                 searchedPaths.Add(path); //adds the path to a list of searched paths to not duplicate results in the checkedlist
                 cleared = false;
-                List<string> accessableDirectories = CheckAccessableDirectories(Directory.GetDirectories(path)); //first layer of subdirectories that are accessable
+                List<string> accessibleDirectories = CheckAccessibleDirectories(Directory.GetDirectories(path)); //first layer of subdirectories that are accessable
                 List<string> audioFiles = new List<string>();
-                List<string> directoriesToCheck = accessableDirectories; //sets first list to check the accessable directories already found on the first layer
+                List<string> directoriesToCheck = accessibleDirectories; //sets first list to check the accessable directories already found on the first layer
                 List<string> checkedDirectories = new List<string>(); //list to store the directories that have been checked and are accessable
                 List<string> tempDirectories = new List<string>(); // list to store temporary directories to add to checked directories
                 bool finished = false; //assume unfinished
@@ -128,7 +128,7 @@ namespace Final_Computer_Science_Project
                 {
                     for (int i = 0; i < directoriesToCheck.Count; i++)
                     {
-                        tempDirectories = CheckAccessableDirectories(Directory.GetDirectories(directoriesToCheck[i]));
+                        tempDirectories = CheckAccessibleDirectories(Directory.GetDirectories(directoriesToCheck[i]));
                         if (tempDirectories.Count > 0)
                         {
                             for (int j = 0; j < tempDirectories.Count; j++)
@@ -146,17 +146,17 @@ namespace Final_Computer_Science_Project
                     {
                         for (int j = 0; j < checkedDirectories.Count; j++)
                         {
-                            accessableDirectories.Add(checkedDirectories[j]); //adds checked directories of the next layer in the accessible directories list to check for audio files
+                            accessibleDirectories.Add(checkedDirectories[j]); //adds checked directories of the next layer in the accessible directories list to check for audio files
                         }
                         directoriesToCheck = checkedDirectories; //sets the directories to check the next layer in                    
                     }
                     checkedDirectories = new List<string>(); //clears checked directories for the next loop (.Clear doesnt work for some reason because uhhh c#)
                 }
 
-                for (int i = 0; i < accessableDirectories.Count; i++)
-                    searchedPaths.Add(accessableDirectories[i]); //adds all the accessable directories to the list of searched paths as well to not duplicate results in the checkedlist
+                for (int i = 0; i < accessibleDirectories.Count; i++)
+                    searchedPaths.Add(accessibleDirectories[i]); //adds all the accessable directories to the list of searched paths as well to not duplicate results in the checkedlist
 
-                audioFiles = AudioFileSearch(path, accessableDirectories);
+                audioFiles = AudioFileSearch(path, accessibleDirectories);
                 audioFilesNames = ExcessPathRemover(audioFiles);
                 for (int i = 0; i < audioFilesNames.Count; i++)
                 {
@@ -165,37 +165,31 @@ namespace Final_Computer_Science_Project
             }
         }
 
-        private List<string> CheckAccessableDirectories(string[] directories)
+        private List<string> CheckAccessibleDirectories(string[] directories)
         {
-            List<string> accessableDirectories = new List<string>();
-            bool accessable;
+            List<string> accessibleDirectories = new List<string>();
+            bool accessible;
             for (int i = 0; i < directories.Length; i++)
             {
-                accessable = false;
+                accessible = false;
                 if (directories[i].Length < 260) //windows limits paths in c# to go up to 260characters
                 {
                     try
                     {
-                        string[] temp = Directory.GetFiles(directories[i]);
-                        if (temp != null) //checks if it can access files (and directories in the next try), if it cant read them the string array's value is null, therefore if it isnt then the directory is readable
-                        {
-                            accessable = true;
-                        }
+                        Directory.GetFiles(directories[i]);
+                        accessible = true;
                     }
                     catch (UnauthorizedAccessException) //just in case it causes an error
                     {
 
                     }
 
-                    if (!accessable)
+                    if (!accessible)
                     {
                         try
                         {
-                            string[] temp2 = Directory.GetDirectories(directories[i]);
-                            if (temp2 != null)
-                            {
-                                accessable = true;
-                            }
+                            Directory.GetDirectories(directories[i]);
+                            accessible = true;
                         }
                         catch (UnauthorizedAccessException)
                         {
@@ -208,11 +202,11 @@ namespace Final_Computer_Science_Project
                 //if (directories[i] == "C:\\Documents and Settings" || directories[i] == "C:\\System Volume Information")
                 //   accessable = false;
 
-                if (accessable) //if accessable has been set to true because files/directories have been read without an error, adds the directory to the list that will be returned when the function ends
-                    accessableDirectories.Add(directories[i]);
+                if (accessible) //if accessable has been set to true because files/directories have been read without an error, adds the directory to the list that will be returned when the function ends
+                    accessibleDirectories.Add(directories[i]);
             }
 
-            return accessableDirectories;
+            return accessibleDirectories;
         }
 
         private List<string> AudioFileSearch(string root, List<string> directories)
@@ -228,23 +222,20 @@ namespace Final_Computer_Science_Project
                         audioFiles.Add(tempFiles[i]);
                     }
                 }
-            }
 
-            for (int x = 0; x < extensions.Count; x++)
-            {
-                for (int i = 0; i < directories.Count; i++) //goes through all the subdirectories from the root path (that have been checked that theyre readable) for audio files
+                for (int j = 0; j < directories.Count; j++) //goes through all the subdirectories from the root path (that have been checked that theyre readable) for audio files
                 {
-                    string[] tempFiles3 = Directory.GetFiles(directories[i], extensions[x], SearchOption.TopDirectoryOnly);
-                    if (tempFiles3.Length > 0)
+                    tempFiles = Directory.GetFiles(directories[j], extensions[x], SearchOption.TopDirectoryOnly);
+                    if (tempFiles.Length > 0)
                     {
-                        for (int j = 0; j < tempFiles3.Length; j++)
+                        for (int k = 0; k < tempFiles.Length; k++)
                         {
-                            audioFiles.Add(tempFiles3[j]);
+                            audioFiles.Add(tempFiles[k]);
                         }
 
                     }
                 }
-            }  
+            } 
             return audioFiles;
         }
 
