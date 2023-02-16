@@ -77,6 +77,7 @@ namespace Final_Computer_Science_Project
             // 
             this.audioNameCheckList.FormattingEnabled = true;
             this.audioNameCheckList.Location = new System.Drawing.Point(623, 22);
+            this.audioNameCheckList.HorizontalScrollbar = true;
             this.audioNameCheckList.Name = "audioNameCheckList";
             this.audioNameCheckList.Size = new System.Drawing.Size(147, 400);
             this.audioNameCheckList.TabIndex = 4;
@@ -188,6 +189,8 @@ namespace Final_Computer_Science_Project
             this.Controls.Add(this.searchButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.directoryTextBox);
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "Music Finder";
             this.Load += new System.EventHandler(this.Form1_Load);

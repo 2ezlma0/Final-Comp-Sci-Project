@@ -10,6 +10,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Final_Computer_Science_Project
 {
@@ -252,8 +253,8 @@ namespace Final_Computer_Science_Project
 
             for (int j = 0; j < removedPaths.Count; j++)
             {
-                if (!output.Contains(removedPaths[j].Remove(removedPaths[j].Length - 4))) //removes duplicates
-                    output.Add(removedPaths[j].Remove(removedPaths[j].Length - 4)); //removes the file extension, they are all 4 characters (including the dot)
+                if (!output.Contains(removedPaths[j].Substring(0, removedPaths[j].LastIndexOf('.')))) //removes duplicates
+                    output.Add(removedPaths[j].Substring(0, removedPaths[j].LastIndexOf('.'))); //removes the file extension
             }
 
             return output;

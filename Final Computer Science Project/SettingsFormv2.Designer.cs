@@ -196,6 +196,8 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.bcolorButton);
             this.Controls.Add(this.mcolorButton);
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "SettingsFormv2";
             this.Text = "Settings";
             this.Load += new System.EventHandler(this.Form2_Load);
