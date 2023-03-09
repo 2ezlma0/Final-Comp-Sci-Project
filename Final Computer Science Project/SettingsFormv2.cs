@@ -61,10 +61,10 @@ namespace Final_Computer_Science_Project
             ChangeBColour();
 
             string[] settings = File.ReadAllLines(settingsConfigPath);
-            settings[4] = "balpha=" + bcolor.A.ToString();
-            settings[5] = "bred=" + bcolor.R.ToString();
-            settings[6] = "bgreen=" + bcolor.G.ToString();
-            settings[7] = "bblue=" + bcolor.B.ToString();
+            settings[4] = bcolor.A.ToString();
+            settings[5] = bcolor.R.ToString();
+            settings[6] = bcolor.G.ToString();
+            settings[7] = bcolor.B.ToString();
             File.Delete(settingsConfigPath);
             File.WriteAllLines(settingsConfigPath, settings);
 
@@ -117,10 +117,10 @@ namespace Final_Computer_Science_Project
             ChangeMColour();
 
             string[] settings = File.ReadAllLines(settingsConfigPath);
-            settings[0] = "malpha=" + mcolor.A.ToString();
-            settings[1] = "mred=" + mcolor.R.ToString();
-            settings[2] = "mgreen=" + mcolor.G.ToString();
-            settings[3] = "mblue=" + mcolor.B.ToString();
+            settings[0] = mcolor.A.ToString();
+            settings[1] = mcolor.R.ToString();
+            settings[2] = mcolor.G.ToString();
+            settings[3] = mcolor.B.ToString();
             File.Delete(settingsConfigPath);
             File.WriteAllLines(settingsConfigPath, settings);
         }

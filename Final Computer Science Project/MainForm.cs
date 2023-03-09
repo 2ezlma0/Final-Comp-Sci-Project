@@ -21,10 +21,9 @@ namespace Final_Computer_Science_Project
         public bool loggedIn = false; //assume not logged in
         public bool cleared = false; //to remove error where it tells you youve searched the path, but youve cleared the checkedlistbox so you no longer have the results
         public static EmbedIOAuthServer _server;
-        public static string authToken;
-        public static string clientID = "0bacb54806ab45a68f5c94a66591f19e";
-        public static string clientSecret = "cd8a8a79499b4f2dab1da538c5b59194"; //client id and secret for app i created at https://developer.spotify.com/dashboard/applications
-        public static string playlistID;
+        public static string authToken, playlistID;
+        public static string ID = "0bacb54806ab45a68f5c94a66591f19e";
+        public static string secret = "cd8a8a79499b4f2dab1da538c5b59194"; //client id and secret for app i created at https://developer.spotify.com/dashboard/applications
         public static List<string> spotifySongLinks = new List<string>();
         public static SearchResponse result = new SearchResponse();
         public static bool noSearchResults = false; //assume there is search results
@@ -33,7 +32,7 @@ namespace Final_Computer_Science_Project
         public Color mcolor, bcolor;
         public List<string> extensions = new List<string>();
         public static string settingsConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "musicfinder.cfg");
-        public static string[] defaultConfigLines = new string[] { "malpha=255", "mred=252", "mgreen=252", "mblue=252", "balpha=240", "bred=240", "bgreen=240", "bblue=240", "", "", "*.wav!", "*.m4a!", "*.mp3!" };
+        public static string[] defaultConfigLines = new string[] { "255", "252", "252", "252", "240", "240", "240", "240", "", "", "*.wav!", "*.m4a!", "*.mp3!" };
         //config line index references:
         //0 = malpha
         //1 = mred
@@ -75,14 +74,14 @@ namespace Final_Computer_Science_Project
         private void SetConfigValues(string[] configLines)
         {
             extensions.Clear(); //resets extension list (might solve the reason why sometimes extensions searched didnt update)
-            malpha = Convert.ToInt32(configLines[0].Split('=')[1]); //.Split('=')[1] split the 'malpha=255' at the equals sign, then uses the second half of the string array created ('mapha=' and '255')
-            mred = Convert.ToInt32(configLines[1].Split('=')[1]);
-            mgreen = Convert.ToInt32(configLines[2].Split('=')[1]);
-            mblue = Convert.ToInt32(configLines[3].Split('=')[1]);
-            balpha = Convert.ToInt32(configLines[4].Split('=')[1]);
-            bred = Convert.ToInt32(configLines[5].Split('=')[1]);
-            bgreen = Convert.ToInt32(configLines[6].Split('=')[1]);
-            bblue = Convert.ToInt32(configLines[7].Split('=')[1]);
+            malpha = Convert.ToInt32(configLines[0]); //.Split('=')[1] split the 'malpha=255' at the equals sign, then uses the second half of the string array created ('mapha=' and '255')
+            mred = Convert.ToInt32(configLines[1]);
+            mgreen = Convert.ToInt32(configLines[2]);
+            mblue = Convert.ToInt32(configLines[3]);
+            balpha = Convert.ToInt32(configLines[4]);
+            bred = Convert.ToInt32(configLines[5]);
+            bgreen = Convert.ToInt32(configLines[6]);
+            bblue = Convert.ToInt32(configLines[7]);
             if (configLines[8] != "") //if config is empty then we use the default clientID and secret
                 cclientID = configLines[8];
             if (configLines[9] != "")
@@ -233,7 +232,6 @@ namespace Final_Computer_Science_Project
                         {
                             audioFiles.Add(tempFiles[k]);
                         }
-
                     }
                 }
             } 
@@ -256,7 +254,7 @@ namespace Final_Computer_Science_Project
                 if (!output.Contains(removedPaths[j].Substring(0, removedPaths[j].LastIndexOf('.')))) //removes duplicates
                     output.Add(removedPaths[j].Substring(0, removedPaths[j].LastIndexOf('.'))); //removes the file extension
             }
-
+            
             return output;
         }
 
@@ -424,21 +422,13 @@ namespace Final_Computer_Science_Project
 
         public static async Task Search(string searchTerm)
         {
-            string ID = "";
-            string secret = "";
             var config = SpotifyClientConfig.CreateDefault();
 
-            if(cclientID == null || cclientID == "" || cclientSecret == null || cclientSecret == "")
-            {
-                ID = clientID;
-                secret = clientSecret;
-            }
-            else
+            if(cclientID != null && cclientSecret != null)
             {
                 ID = cclientID;
                 secret = cclientSecret;
             }
-
 
             var request = new ClientCredentialsRequest(ID, secret);
             var response = await new OAuthClient(config).RequestToken(request);
@@ -498,22 +488,14 @@ namespace Final_Computer_Science_Project
             _server = new EmbedIOAuthServer(new Uri("http://localhost:5000/callback"), 5000);
             await _server.Start();
 
-            _server.AuthorizationCodeReceived += OnAuthorizationCodeReceived;
-            _server.ErrorReceived += OnErrorReceived;
-
-            string ID = "";
-            string secret = "";
-
-            if (cclientID == null || cclientID == "" || cclientSecret == null || cclientSecret == "")
-            {
-                ID = clientID;
-                secret = clientSecret;
-            }
-            else
+            if (cclientID != null || cclientSecret != null)
             {
                 ID = cclientID;
                 secret = cclientSecret;
             }
+
+            _server.AuthorizationCodeReceived += OnAuthorizationCodeReceived;
+            _server.ErrorReceived += OnErrorReceived;
 
             var request = new LoginRequest(_server.BaseUri, ID, LoginRequest.ResponseType.Code)
             {
@@ -525,20 +507,6 @@ namespace Final_Computer_Science_Project
         public static async Task OnAuthorizationCodeReceived(object sender, AuthorizationCodeResponse response)
         {
             await _server.Stop();
-
-            string ID = "";
-            string secret = "";
-            if (cclientID == null || cclientID == "" || cclientSecret == null || cclientSecret == "")
-            {
-                ID = clientID;
-                secret = clientSecret;
-            }
-            else
-            {
-                ID = cclientID;
-                secret = cclientSecret;
-            }
-
             var config = SpotifyClientConfig.CreateDefault();
             var tokenResponse = await new OAuthClient(config).RequestToken(
               new AuthorizationCodeTokenRequest(
